@@ -6,14 +6,13 @@ loop do
   puts "Vvedite cenu tovara"
   cena = gets.to_f
   puts "Vvedite kolichestvo kuplennogo tovara"
-  kolichestvo =  gets.to_f
+  kolichestvo = gets.to_f
   korzina[tovar_name] = { price: cena, quantity: kolichestvo }
 end
 puts korzina
-cena_tovara = 0
 total_amount = 0
 korzina.each.with_index(1) do |(name, value_hash), index|
-  cena_tovara += value_hash[:price] * value_hash[:quantity]
+  cena_tovara = value_hash[:price] * value_hash[:quantity]
   puts "#{index} #{name} - kuplenno na summu #{cena_tovara}"
   total_amount += cena_tovara
 end
