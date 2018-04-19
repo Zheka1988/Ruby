@@ -1,11 +1,11 @@
 class Train
   attr_reader :speed
-  attr_accessor :type, :number, :count_railway_carriage
+  attr_reader :type, :number, :count_railway_carriage, :route, :position_station
 
-  def initialize(number = "100", type = "p",  count_railway_carriage = 1)
-    self.number = number
-    self.type = type
-    self.count_railway_carriage = count_railway_carriage
+  def initialize(number, type,  count_railway_carriage)
+    @number = number
+    @type = type
+    @count_railway_carriage = count_railway_carriage
     @speed = 0
     @route = []
     @position_station = 0
@@ -29,44 +29,51 @@ class Train
     end
   end
 
-  def sub_railway_carriage
+  def remove_railway_carriage
     if @speed == 0
-      @count_railway_carriage -= 1
+      @count_railway_carriage -= 1 if @count_railway_carriage > 0
     else
       puts "Поезд находится в движении, скорость = #{@speed}"
     end
   end
 
-  def routes(route = Route.new)
-     @current_station = route.stations[@position_station]  
-     @route = route.stations
-     puts @route
-     puts @current_station
+  def routes(route)
+     @route = route
+     @route.first_station.train_arrived(self)
   end
-  def next_station
-    @position_station += 1
-    if @position_station > @route.length - 1
-      @position_station -= 1
-      puts "Мы на последней станции #{@route[@position_station]}" 
-      
+
+  def go_next_station
+    if  @route.all_stations[@position_station] == @route.finish_station
+       puts "Мы на последней станции #{@route.all_stations[@position_station].name}"
     else
-      @current_station = @route[@position_station]
+      @route.all_stations[@position_station].train_left(self)
+      @position_station += 1
+      @route.all_stations[@position_station].train_arrived(self)
     end
   end
 
-  def past_station
-    @position_station -= 1
-    if @position_station < 0
-      @position_station = 0 
-      puts "Мы на первой станции #{@route[@position_station]}"
+  def go_past_station
+    if @route.all_stations[@position_station] == @route.first_station
+      puts "Мы на первой станции #{@route.all_stations[@position_station].name}"
     else
-    @current_station = @route[@position_station]
+      @route.all_stations[@position_station].train_left(self)
+      @position_station -= 1
+      @route.all_stations[@position_station].train_arrived(self)
     end
   end
 
   def station_near
-    puts "Предыдущая станция #{@route[@position_station - 1]}"
-    puts "Текущая станция #{@route[@position_station]}"
-    puts "Следующая станция #{@route[@position_station + 1]}"
-  end
+      @station_near = []
+    if @route.all_stations[@position_station] == @route.first_station
+      @station_near << @route.first_station
+      @station_near << @route.all_stations[@position_station + 1]
+    elsif @route.all_stations[@position_station] == @route.finish_station
+      @station_near << @route.all_stations[@position_station - 1]
+      @station_near << @route.finish_station  
+    else
+      @station_near << @route.all_stations[@position_station - 1]
+      @station_near << @route.all_stations[@position_station]
+      @station_near << @route.all_stations[@position_station + 1]
+    end
+  end  
 end

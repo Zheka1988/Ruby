@@ -1,27 +1,26 @@
-#require_relative 'train'
 class Station
-  @@trains = {}
   attr_accessor :name
-
   def initialize(name)
     self.name = name
+    @trains = {}
   end
 
-  def train_arrived(train = Train.new) 
-    @@trains[train.number] = { train.type=>train.count_railway_carriage }
+  def train_arrived(train)
+    @trains[train.number] = { train.type=>train.count_railway_carriage }
   end
 
   def all_trains
-    @@trains.each { |key, value| puts "Поезд № #{key}" }
+    @trains.keys
   end
 
   def list_count_railway_carriage(type)
-    @@trains.each { |key, value| puts key if value.include?(type) }     
+    count = 0
+    @trains.each { |number, value| count += 1 if value.key?(type) }
+    count
   end
 
-  def train_left(number_train)
-    @@trains.delete(number_train)
-    puts "Поезд с номер #{number_train} уехал!!"
+  def train_left(train)
+    @trains.delete(train.number)
+    puts "Поезд с номер #{train.number} уехал!!"
   end
-
 end

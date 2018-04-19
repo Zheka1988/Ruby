@@ -1,25 +1,28 @@
 class Route
-  attr_writer :stations
-  def initialize(*stations)
-    self.stations = stations
+  attr_accessor :first_station, :finish_station
+  def initialize(first_station, finish_station, *intermediate)
+    @first_station = first_station
+    @finish_station = finish_station
+    @intermediate_stations = intermediate
+    @all_stations = []
   end
 
-  def add_station(number_station, name_station)
-    @stations.insert(number_station.to_i - 1, name_station)
+  def all_stations
+    @all_stations = []
+    @all_stations << first_station
+    @all_stations += @intermediate_stations
+    @all_stations << finish_station
   end
 
-  def delete_station_name(name_station)
-    @stations.delete(name_station)
+  def add_station(station)
+    @intermediate_stations << station
   end
 
-  def delete_station_number(number_station)
-    @stations.delete_at(number_station)
+  def delete_station(station)
+    @all_stations.delete(station)
   end
 
   def get_stations
-    @stations.each.with_index(1) do |name_station, index| 
-      puts "Станция номер #{index}. - #{name_station}"
-    end
+   all_stations.each.with_index(1) { |station, index| puts  "Station number #{index} - #{station.name}" }
   end
-
 end
