@@ -9,7 +9,7 @@ class Station
     @trains << train
   end
 
-  def list_count_railway_carriage(type)
+  def count_by_type(type)
     @trains.count { |train|  train.type == type }
   end
 

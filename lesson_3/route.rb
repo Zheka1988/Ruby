@@ -1,5 +1,5 @@
 class Route
-  attr_reader :first_station, :finish_station, :stations
+  attr_reader :stations
   def initialize(first_station, finish_station)
     @stations = [first_station, finish_station]
   end
@@ -16,7 +16,7 @@ class Route
     end
   end
 
-  def get_stations
+  def show_stations
     @stations.each.with_index(1) { |station, index| puts  "Station number #{index} - #{station.name}" }
   end
 end

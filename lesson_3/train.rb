@@ -1,5 +1,5 @@
 class Train
-  attr_reader :type, :speed, :number, :count_railway_carriage, :route, :position_station
+  attr_reader :past_station, :next_station, :current_station, :type, :speed, :number, :count_railway_carriage, :route
 
   def initialize(number, type,  count_railway_carriage)
     @number = number
@@ -38,48 +38,38 @@ class Train
      @route = route
      @route.stations[0].train_arrived(self)
      @position_station = 0
-     @next_station = @route.stations[position_station + 1]
-     @past_station = nil
   end
 
   def go_next_station
-    if  @route.stations[@position_station] == @route.stations[-1]
-      puts "Мы на последней станции #{@route.stations[@position_station].name}"
+    if  get_current_station == @route.stations[-1]
+      puts "Мы на последней станции #{current_station.name}"
     else
-      @route.stations[@position_station].train_left(self)
+      current_station.train_left(self)
       @position_station += 1
-      @route.stations[@position_station].train_arrived(self)
+      current_station.train_arrived(self)
     end
   end
 
   def go_past_station
     if @route.stations[@position_station] == @route.stations[0]
-      puts "Мы на первой станции #{@route.stations[@position_station].name}"
+      puts "Мы на первой станции #{current_station.name}"
     else
-      @route.stations[@position_station].train_left(self)
+      current_station.train_left(self)
       @position_station -= 1
-      @route.stations[@position_station].train_arrived(self)
+      current_station.train_arrived(self)
     end
   end
 
-  def get_next_station
-    if @route.stations[@position_station] == @route.stations[-1]
-      @next_station = nil
-    else
-      next_station = @route.stations[@position_station + 1]
-    end
+  def next_station
+   @route.stations[@position_station + 1] if current_station != @route.stations[-1]
   end
 
-  def get_past_station
-    if @route.stations[@position_station] == @route.stations[0]
-      @past_station = nil
-    else
-      @past_station = @route.stations[position_station - 1]
-    end
+  def past_station
+    @route.stations[position_station - 1] if current_station != @route.stations[0]
   end
 
-  def get_current_station
-    @current_station = @route.stations[position_station]
+  def current_station
+    @route.stations[position_station]
   end
 
 end
