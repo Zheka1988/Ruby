@@ -1,5 +1,5 @@
 class Train
-  attr_reader :past_station, :next_station, :current_station, :type, :speed, :number, :count_railway_carriage, :route, :position_station
+  attr_reader :type, :speed, :number, :count_railway_carriage, :route, :position_station
 
   def initialize(number, type,  count_railway_carriage)
     @number = number
@@ -62,7 +62,7 @@ class Train
     end
   end
 
-  def next_station
+  def get_next_station
     if @route.stations[@position_station] == @route.stations[-1]
       @next_station = nil
     else
@@ -70,7 +70,7 @@ class Train
     end
   end
 
-  def past_station
+  def get_past_station
     if @route.stations[@position_station] == @route.stations[0]
       @past_station = nil
     else
@@ -78,7 +78,7 @@ class Train
     end
   end
 
-  def current_station
+  def get_current_station
     @current_station = @route.stations[position_station]
   end
 
