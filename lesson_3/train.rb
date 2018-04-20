@@ -41,7 +41,7 @@ class Train
   end
 
   def go_next_station
-    if  get_current_station == @route.stations[-1]
+    if current_station == @route.stations[-1]
       puts "Мы на последней станции #{current_station.name}"
     else
       current_station.train_left(self)
