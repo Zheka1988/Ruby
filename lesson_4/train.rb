@@ -1,20 +1,9 @@
 class Train
-  attr_reader :speed, :number, :count_railway_carriage, :route #:type,
-
-  def initialize(number) # ,count_railway_carriage, type,
+  attr_reader :speed, :number, :carriages, :route, :type
+  def initialize(number)
     @number = number
-    #@type = type
-    @count_railway_carriage = []#count_railway_carriage
+    @carriages = []
     @speed = 0
-  end
-
-
-  def add_vagon(vagon)
-    add_railway_carriage(vagon)
-  end
-
-  def remove_vagon(vagon)
-    remove_railway_carriage(vagon)
   end
 
   def up_speed(speed)
@@ -64,20 +53,20 @@ class Train
     @route.stations[position_station]
   end
 
-  protected  #не интересен процесс удаления и добавления вагонов, главное что это возможно
-  def add_railway_carriage(vagon)
-    if @speed == 0 && vagon.type == self.type
-     @count_railway_carriage << vagon
+  def remove_carriage(carriage)
+    if @speed == 0 && @carriage > 0
+      @carriages.delete(carriage)
+      carriage.station = self.current_station
     else
-      puts "Поезд находится в движении, скорость = #{@speed} или не совпадают типы вагонов"
+      puts "Нельзя удалить вагон!"
     end
   end
 
-  def remove_railway_carriage(vagon)
-    if @speed == 0 && @count_railway_carriage > 0
-      @count_railway_carriage.delete(vagon)
+  def add_carriage(carriage)
+    if @speed == 0
+      @carriages << carriage
     else
-      puts "Нельзя удалить вагон!"
+      puts "Поезд в движении"
     end
   end
 

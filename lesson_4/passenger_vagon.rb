@@ -1,7 +1,6 @@
-class PassengerVagon < Vagon
-  TYPE = 'P'
-  def initialize(station)
+class PassengerCarriage < Carriage
+  def initialize(station,number)
     super
-    @type = TYPE
+    @type = 'P'
   end
 end

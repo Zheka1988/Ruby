@@ -1,7 +1,6 @@
-class CargoVagon < Vagon
-  TYPE = 'C'
-  def initialize(station)
+class CargoCarriage < Carriage
+  def initialize(station, number)
     super
-    @type = TYPE
+    @type = 'C'
   end
 end
