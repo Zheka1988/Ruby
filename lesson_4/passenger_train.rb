@@ -1,7 +1,6 @@
 class PassengerTrain < Train
-  def initialize(number)
+  def initialize(number, type = 'P')
     super
-    @type = 'P'
   end
 
   def add_carriage(carriage)
@@ -11,5 +10,4 @@ class PassengerTrain < Train
       puts "Не совпадают типы вагонов"
     end
   end
-
 end

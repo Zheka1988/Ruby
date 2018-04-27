@@ -1,9 +1,10 @@
 class Train
   attr_reader :speed, :number, :carriages, :route, :type
-  def initialize(number)
+  def initialize(number, type)
     @number = number
     @carriages = []
     @speed = 0
+    @type = type
   end
 
   def up_speed(speed)

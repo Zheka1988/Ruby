@@ -3,10 +3,10 @@ require_relative 'passenger_train'
 require_relative 'cargo_train'
 require_relative 'route'
 require_relative 'station'
-require_relative 'vagon'
-require_relative 'passenger_vagon'
-require_relative 'cargo_vagon'
-require_relative 'interfeis'
+require_relative 'carriage'
+require_relative 'passenger_carriage'
+require_relative 'cargo_carriage'
+require_relative 'interface'
 
 
 =begin
@@ -33,7 +33,7 @@ vagon2 = CargoCarriage.new(st2)
 
 
 =end
-fase = Interfeis.new
+face = Interfeis.new
 
 loop do
   puts "==================================================="
@@ -48,30 +48,37 @@ loop do
   a = gets.to_i
   case a
   when 1
-    fase.create_object
+    face.create_object
   when 2
     puts "==================================================="
     puts "Введите название станции"
     name_station = gets.chomp
     puts "Введите номер маршрута"
     number_route = gets.chomp
-    route = fase.routes.each { |route| route if route.number_route == number_route }
     puts "Что вы хотите сделать?"
     puts "1. Удалить"
     puts "2. Добавить"
     a = gets.to_i
     if a == 1
-      route.delete_station(fase.stations.each { |station| station if station.name == name_station })
+      face.routes.each do |route|
+        route.delete_station(face.stations.find { |station|  station.name == name_station }) if route.number_route == number_route
+      end
     else
-      route.add_station(fase.stations.each { |station| station if station.name == name_station })
+      face.routes.each do |route|
+        route.add_station(face.stations.find { |station|  station.name == name_station }) if route.number_route == number_route
+      end
     end
+    puts face.routes
   when 3
     puts "==================================================="
     puts "Введите номер маршрута"
     number_route = gets.chomp
     puts "Введите номер поезда"
     number_train = gets.chomp
-    fase.trains.each { |train| train.routes(fase.routes.each { |route| route if route.number_route == number_route }) if train.number == number_train }
+    face.trains.each do |train|
+      train.routes(face.routes.find { |route| route.number_route == number_route }) if train.number == number_train
+    end
+    puts face.trains.each {|train| puts "#{train.route}" if train.number == namber_train}
   when 4
     puts "==================================================="
     puts "Введите номер вагона"
@@ -83,12 +90,12 @@ loop do
     puts "2. Отцепить вагон"
     a = gets.to_i
     if a == 1
-      fase.trains.each do |train|
-        train.add_carriage(fase.carriages.each{ |carriage| carriage if carriage.number == number_carriage }) if train.number == number_train
+      face.trains.each do |train|
+        train.add_carriage(face.carriages.each{ |carriage| carriage if carriage.number == number_carriage }) if train.number == number_train
       end
     elsif a == 2
-      fase.trains.each do |train|
-        train.remove_carriage(fase.carriages.each{ |carriage| carriage if carriage.number == number_carriage }) if train.number == number_train
+      face.trains.each do |train|
+        train.remove_carriage(face.carriages.each{ |carriage| carriage if carriage.number == number_carriage }) if train.number == number_train
       end
     end
   when 5
@@ -100,22 +107,22 @@ loop do
     puts "2. <---"
     a = gets.to_i
     if a == 1
-      fase.trains.each do |train|
+      face.trains.each do |train|
         train.go_next_station if train.number == number_train
       end
     elsif a == 2
-      fase.trains.each do |train|
+      face.trains.each do |train|
         train.go_past_station if train.number == number_train
       end
     end
   when 6
     puts "==================================================="
-    fase.stations.each.with_index(1) { |station, index| puts "Станция № #{index} - #{station.name}" }
+    face.stations.each.with_index(1) { |station, index| puts "Станция № #{index} - #{station.name}" }
   when 7
     puts "==================================================="
     puts "Введите название станции"
     name_station = gets.chomp
-    safe.stations.each { |station| puts "#{station.trains}" if station.name == name_station }
+    face.stations.each { |station| puts "#{station.trains}" if station.name == name_station }
   when 8
     exit
   else

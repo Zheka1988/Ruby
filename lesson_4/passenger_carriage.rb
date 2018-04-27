@@ -1,6 +1,5 @@
 class PassengerCarriage < Carriage
-  def initialize(station,number)
+  def initialize(station, number, type = 'P')
     super
-    @type = 'P'
   end
 end
