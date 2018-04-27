@@ -7,11 +7,13 @@ class Route
 
   def add_station(station)
     @stations.insert(-2, station)
+    show_stations
   end
 
   def delete_station(station)
     if station != @stations[0] && station != @stations[-1]
       @stations.delete(station)
+      show_stations
     else
       puts "The station can not be removed!!"
     end

@@ -53,32 +53,54 @@ class Interfeis
         one_station = gets.chomp
         puts "Введите название последней станции"
         end_station = gets.chomp
-        @routes << Route.new(@stations.find { |st| st.name == one_station }, @stations.find { |st| st.name == end_station }, number_route)
+        if !@stations.find { |station| station.name == one_station } && !@stations.find { |station| station.name == end_station }
+          puts "Первой или второй станции не существует, надо сначала создать"
+        else  
+          @routes << Route.new(@stations.find { |st| st.name == one_station }, @stations.find { |st| st.name == end_station }, number_route)
+        end
       end
-      @routes.each.with_index(1) { |route, index| puts "Маршрут #{index} - #{route.number_route}"}
+      @routes.each.with_index(1) do |route, index| 
+        puts "Маршрут #{index} - #{route.number_route}, первая станция #{route.stations[0].name}, последняя станция #{route.stations[-1].name}"
+      end
     when 4
       puts "=========================================="
       puts "Введите номер вагона"
       number_carriage = gets.to_i
-      if @carriage.find {|carriage| carriage.number == number_carriage }
+      if @carriages.find {|carriage| carriage.number == number_carriage }
         puts "Такой вагон уже существует!"
       else
         puts "Введите название станции, на которой стоит вагон"
         station_name = gets.chomp
-        puts "Выберите тип вагона"
-        puts "1. Пассажирский"
-        puts "2. Грузовой"
-        a = gets.to_i
-        if a == 1
-          @carriages << PassengerCarriage.new(@stations.each { |station| station if station.name == station_name }, number_carriage)
-        elsif a == 2
-          @carriages << CargoCarriage.new(@stations.each { |station| station if station.name == station_name }, number_carriage)
+        if !@stations.find { |station| station.name == station_name }
+          puts "Такой станции не существует (можете ее создать, выбрав соотвествующий пукт меню)"
+        else
+          puts "Выберите тип вагона"
+          puts "1. Пассажирский"
+          puts "2. Грузовой"
+          a = gets.to_i
+          if a == 1
+            @carriages << PassengerCarriage.new(@stations.find { |station| station.name == station_name }, number_carriage)
+          elsif a == 2
+            @carriages << CargoCarriage.new(@stations.find { |station| station.name == station_name }, number_carriage)
+          end
+          @carriages.each.with_index(1) { |carriage, index| puts "Вагон #{index} - #{carriage.number}, находится на станции #{carriage.station.name}" }
         end
       end
-      @carriages.each.with_index(1) { |carriage, index| puts "Вагон #{index} - #{carriage.number}, находится на станции #{carriage.station}"}
     else
        puts "=========================================="
        puts "Выберите число, соответствующее списку!!!"
     end
   end
+
+  def add_station(number_route, name_station)
+    @routes.each do |route|
+      route.add_station(@stations.find { |st| st.name ==name_station })
+    end
+  end
+
+  def del_station(number_route, name_station)
+    @routes.each do |route|
+      route.delete_station(@stations.find { |st| st.name ==name_station })   
+    end   
+  end  
 end

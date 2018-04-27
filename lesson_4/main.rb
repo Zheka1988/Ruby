@@ -51,26 +51,27 @@ loop do
     face.create_object
   when 2
     puts "==================================================="
+    route = nil
     puts "Введите название станции"
     name_station = gets.chomp
     puts "Введите номер маршрута"
     number_route = gets.chomp
+
+    #проверка наличия станции и маршрута (создать функции по проверке станций имаршрутов def station?)
     puts "Что вы хотите сделать?"
     puts "1. Удалить"
     puts "2. Добавить"
     a = gets.to_i
     if a == 1
-      face.routes.each do |route|
-        route.delete_station(face.stations.find { |station|  station.name == name_station }) if route.number_route == number_route
-      end
-    else
-      face.routes.each do |route|
-        route.add_station(face.stations.find { |station|  station.name == name_station }) if route.number_route == number_route
-      end
+      face.del_station(number_route, name_station)
+    elsif a == 2
+      face.add_station(number_route, name_station)
+    else 
+      puts "Нет такого пункта!!!" 
     end
-    puts face.routes
   when 3
     puts "==================================================="
+        #проверка наличия поезда и маршрута
     puts "Введите номер маршрута"
     number_route = gets.chomp
     puts "Введите номер поезда"
@@ -78,9 +79,10 @@ loop do
     face.trains.each do |train|
       train.routes(face.routes.find { |route| route.number_route == number_route }) if train.number == number_train
     end
-    puts face.trains.each {|train| puts "#{train.route}" if train.number == namber_train}
+    puts face.trains.each {|train| puts "Поезду присвоен маршрут #{train.route.number_route}" if train.number == number_train}
   when 4
     puts "==================================================="
+        #проверка наличия поезда и вагона и проверка того, чтоб они были на одной станции
     puts "Введите номер вагона"
     number_carriage = gets.chomp
     puts "Введите номер поезда"
@@ -100,6 +102,7 @@ loop do
     end
   when 5
     puts "==================================================="
+        #проверка наличия поезда
     puts "Введите номер поезда"
     number_train = gets.chomp
     puts "Куда вы хотите переместить?"
@@ -117,9 +120,11 @@ loop do
     end
   when 6
     puts "==================================================="
+   # if face.stations
     face.stations.each.with_index(1) { |station, index| puts "Станция № #{index} - #{station.name}" }
   when 7
     puts "==================================================="
+                                                          #проверить наличия станции"
     puts "Введите название станции"
     name_station = gets.chomp
     face.stations.each { |station| puts "#{station.trains}" if station.name == name_station }

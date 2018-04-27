@@ -66,6 +66,7 @@ class Train
   def add_carriage(carriage)
     if @speed == 0
       @carriages << carriage
+      puts "Прицеплен Вагон с номером #{carriage.number}" ## ------------------------------metka
     else
       puts "Поезд в движении"
     end
