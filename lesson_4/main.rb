@@ -112,7 +112,7 @@ loop do
   when 5                         #Переместить поезд по маршруту
     puts "===================================================" # здесь ошибка функция face.train_exist?(number_train) не правильно отрабатывает (выше она работает правильно (when 3, when 4))
     puts "Введите номер поезда"
-    number_train = gets.chomp
+    number_train = gets.to_i
     if face.train_exist?(number_train)
       begin
         puts "Куда вы хотите переместить?"

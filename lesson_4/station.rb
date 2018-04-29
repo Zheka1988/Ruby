@@ -12,6 +12,7 @@ class Station
 =end
   def train_arrived(train)
     @trains << train
+    puts "Текущая станция #{@name}"
   end
 
   def count_by_type(type)
@@ -21,5 +22,6 @@ class Station
   def train_left(train)
     @trains.delete(train)
     puts "Поезд с номером #{train.number} уехал!!"
+
   end
 end

@@ -48,11 +48,11 @@ class Train
   end
 
   def past_station
-    @route.stations[position_station - 1] if current_station != @route.stations[0]
+    @route.stations[@position_station - 1] if current_station != @route.stations[0]
   end
 
   def current_station
-    @route.stations[position_station]
+    @route.stations[@position_station]
   end
 
   def remove_carriage(carriage)
