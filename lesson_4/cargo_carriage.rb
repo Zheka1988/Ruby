@@ -1,5 +1,5 @@
 class CargoCarriage < Carriage
-  def initialize(station, number, type = 'C')
+  def initialize(number, type = 'C') #,station
     super
   end
 end

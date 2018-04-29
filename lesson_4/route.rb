@@ -20,6 +20,7 @@ class Route
   end
 
   def show_stations
+    puts "Маршрут содержит станции: "
     @stations.each.with_index(1) { |station, index| puts  "Station number #{index} - #{station.name}" }
   end
 

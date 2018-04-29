@@ -17,9 +17,10 @@ class Train
   end
 
   def routes(route)
-    @route = route
-    @route.stations[0].train_arrived(self)
-    @position_station = 0
+      @route = route
+      @route.stations[0].train_arrived(self)
+      @position_station = 0
+      puts @route.number_route
   end
 
   def go_next_station
@@ -55,11 +56,12 @@ class Train
   end
 
   def remove_carriage(carriage)
-    if @speed == 0 && @carriage > 0
+    if @speed == 0 && !@carriages.empty?
       @carriages.delete(carriage)
-      carriage.station = self.current_station
+      #carriage.station = self.current_station
+      puts "Вагон отцеплен от поезда"
     else
-      puts "Нельзя удалить вагон!"
+      puts "Поезд в движении"
     end
   end
 

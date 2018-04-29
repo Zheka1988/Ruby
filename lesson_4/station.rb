@@ -3,8 +3,13 @@ class Station
   def initialize(name)
     @name = name
     @trains = []
+#    @carriages = []
   end
-
+=begin
+  def carriage_added(carriage)
+    @carriages << carriage
+  end
+=end
   def train_arrived(train)
     @trains << train
   end

@@ -7,7 +7,16 @@ class CargoTrain < Train
     if carriage.type == self.type
       super
     else
-      puts "Не совпадают типы вагонов"
+      puts "У поезда и вагона разные типы"
     end
   end
+
+  def remove_carriage(carriage)
+    if carriage.type == self.type
+      super
+    else
+      puts "У поезда и вагона разные типы"
+    end
+  end
+
 end
