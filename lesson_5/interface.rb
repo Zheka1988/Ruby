@@ -81,7 +81,7 @@ def create_stations
       puts "Станция с таким названием уже существует!"
     else
       @stations << Station.new(name_station)
-      all_stations(@stations)
+      all_stations(@stations)       #здесь
     end
     @stations.each.with_index(1) { |station, index| puts "Cтанция #{index} - \"#{station.name}\"" }
   end

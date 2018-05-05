@@ -1,6 +1,6 @@
 require_relative 'all_objects'
 class Station
-  extend All_objects
+  include All_objects
   attr_reader :name, :trains
   def initialize(name)
     @name = name
@@ -23,6 +23,6 @@ class Station
 
   def self.all
    # puts "ghbdtn"
-    puts "#{@obj_stations}"
+    All_objects::get_stations #здесь
   end
 end

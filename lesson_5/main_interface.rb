@@ -101,7 +101,7 @@ class MainInterface
       when 6                         #Показать все станции"
         puts "==================================================="
         #@face.stations.each.with_index(1) { |station, index| puts "Станция № #{index} - #{station.name}" }
-        @face.stations[0].class.all
+        @face.stations[0].class.all                                                             #здесь
       when 7                         #Показать все поезда на станции"
         puts "==================================================="
         puts "Введите название станции"
