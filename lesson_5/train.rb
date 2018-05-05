@@ -1,9 +1,15 @@
 require_relative 'company'
+require_relative 'all_objects'
+require_relative 'instance_counter'
 class Train
+  include InstanceCounter::InstanceMethods
+  extend InstanceCounter::ClassMethods
   include Company
+  extend All_objects
   attr_reader :speed, :number, :carriages, :route, :type
   def self.find(number)
-    #проверка на наличие поезда
+    trains = get_trains
+    trains.find { |train| train.number == number }
   end
 
   def initialize(number, type)
@@ -12,6 +18,8 @@ class Train
     @speed = 0
     @type = type
     self.class.find(number)
+    self.register_instance
+    self.class.instances
   end
 
   def up_speed(speed)

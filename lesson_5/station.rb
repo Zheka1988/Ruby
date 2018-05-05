@@ -1,10 +1,15 @@
 require_relative 'all_objects'
+require_relative 'instance_counter'
 class Station
-  include All_objects
+  extend All_objects
+  include InstanceCounter::InstanceMethods
+  extend InstanceCounter::ClassMethods
   attr_reader :name, :trains
   def initialize(name)
     @name = name
     @trains = []
+    self.register_instance
+    self.class.instances
   end
 
   def train_arrived(train)
@@ -22,7 +27,6 @@ class Station
   end
 
   def self.all
-   # puts "ghbdtn"
-    All_objects::get_stations #здесь
+    get_stations
   end
 end

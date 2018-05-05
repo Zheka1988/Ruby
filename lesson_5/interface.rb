@@ -53,6 +53,7 @@ class Interface
 
   def train_exist?(number_train)
     @trains.find { |train|  train.number == number_train  }
+   # @trains.find { |train|  train.class.find(number_train)  }
   end
 
   def output_type(type)
