@@ -1,10 +1,17 @@
+require_relative 'company'
 class Train
+  include Company
   attr_reader :speed, :number, :carriages, :route, :type
+  def self.find(number)
+    #проверка на наличие поезда
+  end
+
   def initialize(number, type)
     @number = number
     @carriages = []
     @speed = 0
     @type = type
+    self.class.find(number)
   end
 
   def up_speed(speed)

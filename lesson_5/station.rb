@@ -1,4 +1,6 @@
+require_relative 'all_objects'
 class Station
+  extend All_objects
   attr_reader :name, :trains
   def initialize(name)
     @name = name
@@ -17,6 +19,10 @@ class Station
   def train_left(train)
     @trains.delete(train)
     puts "Поезд с номером #{train.number} уехал!!"
+  end
 
+  def self.all
+   # puts "ghbdtn"
+    puts "#{@obj_stations}"
   end
 end

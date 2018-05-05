@@ -1,4 +1,6 @@
+require_relative 'all_objects'
 class Interface
+ include All_objects
   attr_reader :stations, :trains, :routes, :carriages
   def initialize
     @stations = []
@@ -79,6 +81,7 @@ def create_stations
       puts "Станция с таким названием уже существует!"
     else
       @stations << Station.new(name_station)
+      all_stations(@stations)
     end
     @stations.each.with_index(1) { |station, index| puts "Cтанция #{index} - \"#{station.name}\"" }
   end
