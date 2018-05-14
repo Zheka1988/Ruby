@@ -4,28 +4,20 @@ class Train
 
   include Manufacturer
   include InstanceCounter
-  #include InstanceCounter::InstanceMethods
-  #extend InstanceCounter::ClassMethods
-
-  @@trains = []
-  @@counter = 0
-=begin
-  class << self
-    attr_accessor :counter
-  end
-=end
+  #@@trains = []
+  @@trains = Hash.new(0) #сделал такую запись, т.к. при поиске по номеру (когда нет объекта) возвращает последний объект, а не nil
   attr_reader :speed, :number, :carriages, :route, :type
   def initialize(number, type)
     @number = number
     @carriages = []
     @speed = 0
     @type = type
-    @@trains << self
-    @@counter += self.register_instance
+    @@trains = {number.to_s => self} #со значением по умолчанию, когда нет объекта, не выходило nil, и здесь тоже код веселее сделал, так почему то пошло?
+    self.register_instance
   end
 
   def self.find(number)
-    @@trains.find { |train| train.number == number}
+    @@trains[number.to_s]  
   end
 
   def up_speed(speed)

@@ -1,10 +1,17 @@
+require_relative 'instance_counter'
 class Station
+  include InstanceCounter
   attr_reader :name, :trains
   @@stations = []
   def initialize(name)
     @name = name
     @trains = []
     @@stations << self
+    self.register_instance
+  end
+
+  def self.all
+    @@stations
   end
 
   def train_arrived(train)
@@ -20,9 +27,4 @@ class Station
     @trains.delete(train)
     puts "Поезд с номером #{train.number} уехал!!"
   end
-
-  def self.all
-    @@stations
-  end
-
 end
