@@ -1,7 +1,7 @@
 class Interface
   attr_reader :stations, :trains, :routes, :carriages
 
-  NUMBER_FORMAT = /\A[а-яa-z0-9]{3}\-?[а-яa-z0-9]{2}\Z/i
+  NUMBER_FORMAT = /\A[а-яa-z0-9]{3}\-?[а-яa-z0-9]{2}\Z/ui
 
   def initialize
     @stations = []
@@ -57,7 +57,7 @@ class Interface
   end
 
   def output_type(type)
-      if  type == 'C'
+      if  type == 'c'
         'грузовой'
       else
         'пасажирский'
@@ -88,12 +88,19 @@ def create_stations
 end
 
   def create_trains
+    number_train =''
     loop do
       puts "=========================================="
       puts "Введите номер поезда или пустую строку (просто нажмите Enter), чтобы выйти"
-      number_train = gets.to_i
-      if number_train == 0 || train_exist?(number_train)
-        break if number_train == 0
+      number_train = gets.chomp
+      break if number_train == ''
+      begin
+        raise if number_train !~ NUMBER_FORMAT
+      rescue 
+        puts "Номер не соответствует формату"
+        create_trains
+      end
+      if train_exist?(number_train)
         puts "Поезд с таким номером уже существует!"
       else
         begin

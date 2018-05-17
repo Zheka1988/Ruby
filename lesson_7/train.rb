@@ -4,7 +4,6 @@ class Train
 
   include Manufacturer
   include InstanceCounter
-  NUMBER_FORMAT = /\A[а-яa-z0-9]{3}\-?[а-яa-z0-9]{2}\Z/i
   @@trains = {}
   attr_reader :speed, :number, :carriages, :route, :type
   def self.find(number)
@@ -16,26 +15,8 @@ class Train
     @carriages = []
     @speed = 0
     @type = type
-    a = 0
-    begin
-      puts "exception"
-      validate!
-    rescue
-      #a += 1
-      Interface.create_trains
-      #retry if a < 2
-    end
-    #create_trains
     @@trains[number] = self
     register_instance
-  end
-
-
-
-
-  def validate!
-    puts number
-    raise "Не верно веден номер поезда" if number.to_s !~ NUMBER_FORMAT
   end
 
   def up_speed(speed)
