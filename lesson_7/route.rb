@@ -12,8 +12,12 @@ class Route
     register_instance!
   end
 
-  def add_station(station)
+  def add_station(station) # можно было воспользоваться методом valid, но тогда надо было передать ее аргументом или сначала записать станцию в массив, а далее если не подходит то удалить, мне показалось так проще, не смотря на маленькое дублирование)
+    raise if station.class != Station || @stations.find { |stat| stat.name == station.name}
     @stations.insert(-2, station)
+  rescue
+    puts "Нет существует такой станции или она уже включена в маршрут!"
+  ensure
     show_stations
   end
 
@@ -32,20 +36,27 @@ class Route
   end
 
   def change_number_route(number)
+    spare_number = @number_route
     @number_route = number
+    if valid?
+      puts "Номер изменен на #{number}"
+    else
+      puts "Номер не соответствует формату!"
+      @number_route = spare_number
+    end
   end
 
   def valid?
-    if validate!
-      true
-    else
-      false
-    end
+    validate!
+  rescue
+    false
   end
 
   protected
 
   def validate!
+   # @stations.each {|station| raise "Нет такой(их) станций" if station.class != Station } проверка на наличие станций уже есть в интерфейсе, метод station_exist?)))
+    raise "Станции не могут быть одинаковыми" if @stations[0].name ==  @stations[1].name
     raise "Номер маршрута состоит из 4 цифр" if number_route.to_s !~ NUMBER_FORMAT
     true
   end

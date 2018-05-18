@@ -19,8 +19,13 @@ class Station
   end
 
   def train_arrived(train)
+    raise if train.class != Train || @trains.find { |tr| tr.number == train.number}
     @trains << train
     puts "Поезд c номером #{train.number}, прибыл!"
+  rescue
+    puts "Нет сещуствует такого поезда или он уже стоит на этой станции!"
+  ensure
+    @trains
   end
 
   def count_by_type(type)
@@ -33,11 +38,9 @@ class Station
   end
 
   def valid?
-    if validate!
-      true
-    else
-      false
-    end
+    validate!
+  rescue
+    false
   end
 
   protected
