@@ -23,7 +23,7 @@ class Train
   end
 
   def validate!
-    raise if number !~ NUMBER_FORMAT
+    raise puts "Не корректно введен номер!" if number !~ NUMBER_FORMAT
     true
   end
 
@@ -45,7 +45,7 @@ class Train
 
   def go_next_station
     if current_station == @route.stations[-1]
-      puts "Мы на последней станции #{current_station.name}"
+      current_station.name
     else
       current_station.train_left(self)
       @position_station += 1
@@ -55,7 +55,7 @@ class Train
 
   def go_past_station
     if @route.stations[@position_station] == @route.stations[0]
-      puts "Мы на первой станции #{current_station.name}"
+      current_station.name
     else
       current_station.train_left(self)
       @position_station -= 1
@@ -76,20 +76,10 @@ class Train
   end
 
   def remove_carriage(carriage)
-    if @speed == 0 && !@carriages.empty?
-      @carriages.delete(carriage)
-      puts "Вагон отцеплен от поезда"
-    else
-      puts "Поезд в движении"
-    end
+    @carriages.delete(carriage) if @speed == 0 && !@carriages.empty?
   end
 
   def add_carriage(carriage)
-    if @speed == 0
-      @carriages << carriage
-      puts "Прицеплен Вагон с номером #{carriage.number}"
-    else
-      puts "Поезд в движении"
-    end
+    @carriages << carriageif if @speed == 0
   end
 end

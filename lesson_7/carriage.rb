@@ -14,6 +14,7 @@ class Carriage
 
   def valid?
     validate!
+    true
   rescue
     false
   end
@@ -23,6 +24,5 @@ class Carriage
   def validate!
     raise "Вагон может быть пассажирским 'p' или грузовым 'c'" if !@array_type.include?(type) #if type != 'p' && type != 'c' # по логике должно быть или ||
     raise "Номер вагона состоит из 4 цифр" if number.to_s !~ NUMBER_FORMAT
-    true
   end
 end

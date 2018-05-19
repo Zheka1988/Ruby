@@ -110,7 +110,6 @@ end
       @trains.each.with_index(1) { |train, index| puts "Поезд #{index} - #{train.number}, тип поезда - " + output_type(train.type) }
     end
   rescue
-    puts "Не корректно введен номер!"
     retry
   end
 

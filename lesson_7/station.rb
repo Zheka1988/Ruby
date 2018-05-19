@@ -19,11 +19,10 @@ class Station
   end
 
   def train_arrived(train)
-    raise if train.class != Train || @trains.find { |tr| tr.number == train.number}
+    raise puts "Не существует такого поезда или он уже стоит на этой станции!" if train.class != Train || @trains.find { |tr| tr.number == train.number}
     @trains << train
-    puts "Поезд c номером #{train.number}, прибыл!"
   rescue
-    puts "Нет сещуствует такого поезда или он уже стоит на этой станции!"
+    false
   ensure
     @trains
   end
@@ -34,7 +33,6 @@ class Station
 
   def train_left(train)
     @trains.delete(train)
-    puts "Поезд с номером #{train.number} уехал!"
   end
 
   def valid?

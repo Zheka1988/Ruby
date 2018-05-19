@@ -70,11 +70,11 @@ class MainInterface
           if a == 1
             @face.trains.each do |train|
               train.add_carriage(@face.carriages.find{ |carriage| carriage.number == number_carriage }) if train.number == number_train
-            end
+            end           
           else
             @face.trains.each do |train|
               train.remove_carriage(@face.carriages.find{ |carriage| carriage.number == number_carriage }) if train.number == number_train
-            end
+            end   
           end
         else
           puts "Убедитесь в существовании вагона и поезда" #, а также они должны стоять на одной станции"
@@ -100,6 +100,7 @@ class MainInterface
         end
       when 6                         #Показать все станции"
         puts "==================================================="
+        puts "Маршрут содержит станции: "
         @face.stations.each.with_index(1) { |station, index| puts "Станция № #{index} - #{station.name}" }
       when 7                         #Показать все поезда на станции"
         puts "==================================================="
