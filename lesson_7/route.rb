@@ -13,10 +13,11 @@ class Route
   end
 
   def add_station(station) # можно было воспользоваться методом valid, но тогда надо было передать ее аргументом или сначала записать станцию в массив, а далее если не подходит то удалить, мне показалось так проще, не смотря на маленькое дублирование)
-    raise puts "Нет существует такой станции или она уже включена в маршрут!" if station.class != Station || @stations.find { |stat| stat.name == station.name}
-    raise puts "Данная станция включена в маршрут" if @stations.find { |stat| stat == station }
+    raise "Нет существует такой станции или она уже включена в маршрут!" if station.class != Station || @stations.find { |stat| stat.name == station.name}
+    raise "Данная станция включена в маршрут" if @stations.find { |stat| stat == station }
     @stations.insert(-2, station)
-  rescue
+  rescue Exception => e
+    puts e.message
   ensure
     show_stations
   end
@@ -40,7 +41,6 @@ class Route
     if valid?
       puts "Номер изменен на #{number}"
     else
-      puts "Номер не соответствует формату!"
       @number_route = spare_number
     end
   end
@@ -48,7 +48,8 @@ class Route
   def valid?
     validate!
     true
-  rescue
+  rescue Exception => e
+    puts e.message
     false
   end
 

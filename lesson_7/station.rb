@@ -19,9 +19,10 @@ class Station
   end
 
   def train_arrived(train)
-    raise puts "Не существует такого поезда или он уже стоит на этой станции!" if train.class != Train || @trains.find { |tr| tr.number == train.number}
+    raise "Не существует такого поезда или он уже стоит на этой станции!" if train.class != Train || @trains.find { |tr| tr.number == train.number}
     @trains << train
-  rescue
+  rescue Exception => e
+    puts e.message
     false
   ensure
     @trains
@@ -37,7 +38,8 @@ class Station
 
   def valid?
     validate!
-  rescue
+  rescue Exception => e
+    puts e.message
     false
   end
 

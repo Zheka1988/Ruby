@@ -23,7 +23,7 @@ class Train
   end
 
   def validate!
-    raise puts "Не корректно введен номер!" if number !~ NUMBER_FORMAT
+    raise "Не корректно введен номер!" if number !~ NUMBER_FORMAT
     true
   end
 
@@ -37,10 +37,10 @@ class Train
   end
 
   def routes(route)
-      @route = route
-      @route.stations[0].train_arrived(self)
-      @position_station = 0
-      puts @route.number_route
+    @route = route
+    @route.stations[0].train_arrived(self)
+    @position_station = 0
+    @route.number_route
   end
 
   def go_next_station
@@ -64,7 +64,7 @@ class Train
   end
 
   def next_station
-   @route.stations[@position_station + 1] if current_station != @route.stations[-1]
+    @route.stations[@position_station + 1] if current_station != @route.stations[-1]
   end
 
   def past_station

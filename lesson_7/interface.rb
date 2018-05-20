@@ -55,11 +55,11 @@ class Interface
   end
 
   def output_type(type)
-      if  type == 'c'
-        'грузовой'
-      else
-        'пасажирский'
-      end
+    if  type == 'c'
+      'грузовой'
+    else
+      'пасажирский'
+    end
   end
 
 def show_menu
@@ -109,7 +109,8 @@ end
       end
       @trains.each.with_index(1) { |train, index| puts "Поезд #{index} - #{train.number}, тип поезда - " + output_type(train.type) }
     end
-  rescue
+  rescue Exception => e
+    puts e.message
     retry
   end
 
@@ -151,7 +152,6 @@ end
         puts "Вагон с таким номером уже существует!"
         @carriages.each.with_index(1) { |carriage, index| puts "Вагон #{index} - #{carriage.number}, находится на станции \"#{carriage.station.name}\", тип вагона - " + output_type(carriage.type) }
       else
-
         begin
           puts "Выберите тип вагона"
           puts "1. Грузовой"

@@ -15,7 +15,8 @@ class Carriage
   def valid?
     validate!
     true
-  rescue
+  rescue Exception => e
+    puts e.message
     false
   end
 
