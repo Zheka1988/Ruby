@@ -175,9 +175,9 @@ end
         end
         @carriages.each.with_index(1) do |carriage, index| print "Вагон #{index} - #{carriage.number}, тип вагона - " + output_type(carriage.type)
           if carriage.type == 'c'
-            puts ", объем вагона #{carriage.overall_volume}."
+            puts ", объем вагона #{carriage.capacity}."
           else
-            puts ", количество мест #{carriage.count_seats}."
+            puts ", количество мест #{carriage.capacity}."
           end
         end
       end

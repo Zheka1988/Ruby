@@ -155,9 +155,9 @@ class MainInterface
 
   def print_info_carriage(carriage, index)
     if carriage.type == 'c'
-      puts "#{index}. Номер вагона #{carriage.number}, тип = #{carriage.type}, занято #{carriage.occupied_volume}, свободно #{carriage.free_volume}"
+      puts "#{index}. Номер вагона #{carriage.number}, тип = #{carriage.type}, занято #{carriage.occupied_capacity}, свободно #{carriage.capacity}"
     else
-      puts "#{index}. Номер вагона #{carriage.number}, тип = #{carriage.type}, занято #{carriage.occupied_seats}, свободно #{carriage.free_seats}"
+      puts "#{index}. Номер вагона #{carriage.number}, тип = #{carriage.type}, занято #{carriage.occupied_capacity}, свободно #{carriage.capacity}"
     end
   end
 
@@ -165,10 +165,10 @@ class MainInterface
     puts "Какой объем занять?"
     volume = gets.to_i
     @face.carriages.each do |carriage|
-      if carriage.number == number_carriage && carriage.free_volume >= volume
-        carriage.load_into_carriage(volume)
-        puts "Осталось свободно: #{carriage.free_volume} м3"
-        puts "Занято: #{carriage.occupied_volume} м3"
+      if carriage.number == number_carriage && carriage.capacity >= volume
+        carriage.take_capacity(volume)
+        puts "Осталось свободно: #{carriage.capacity} м3"
+        puts "Занято: #{carriage.occupied_capacity} м3"
         break
       else
         puts "Недостаточно свободного места!"
@@ -179,10 +179,10 @@ class MainInterface
 
   def buy_seats(number_carriage)
     @face.carriages.each do |carriage|
-      if carriage.number == number_carriage && carriage.free_seats > 0
-        carriage.take_place
-        puts "Осталось свободных мест: #{carriage.free_seats}"
-        puts "Занято мест: #{carriage.occupied_seats}"
+      if carriage.number == number_carriage && carriage.capacity > 0
+        carriage.take_capacity
+        puts "Осталось свободных мест: #{carriage.capacity}"
+        puts "Занято мест: #{carriage.occupied_capacity}"
         break
       else
         puts "Свободные места закончились!"
@@ -190,5 +190,4 @@ class MainInterface
       end
     end
   end
-
 end
