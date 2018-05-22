@@ -132,22 +132,17 @@ class MainInterface
           @face.trains.each do |train|
               train.all_carriages { |carriage, index| print_info_carriage(carriage, index) } if train.number == number_train
           end
-        end
-      when 10 #-----------------------------------------------------------------------------------------------
-        i = 0
-        begin
-        puts "Грузовой (c) или пассажирский (p)?"
-        type = gets.chomp
-        end until  type != 'c' || type != 'p'
-        if type == 'c'
-          puts "Выберите поезд по номеру"
-          @face.trains.each { |train| puts "Номер поезда - #{train.number}"; i += 1 if train.type == type }
-          occupy if i > 0
-
         else
-          puts "Выберите поезд по номеру"
-          @face.trains.each { |train| puts "Номер поезда - #{train.number}"; i += 1 if train.type == type }
-          buy_seats if i > 0
+          puts "Поезда с таким номером не существует"
+        end
+      when 10
+        puts "Введите номер вагона"
+        number_carriage = gets.chomp
+        carriage = @face.carriages.find { |carriage| carriage if carriage.number == number_carriage }
+        if carriage.type == 'c'
+          occupy(number_carriage)
+        else
+          buy_seats(number_carriage)
         end
       when 11
         exit
@@ -166,48 +161,31 @@ class MainInterface
     end
   end
 
-  def occupy
-    number_train = 0
-    volume = 0
-    number_carriage = 0
-    number_train = gets.chomp      
-    puts "Выбрать вагон"
-    @face.trains.each do |train|
-      train.carriages.each { |carriage| puts "Номер вагона - #{carriage.number}"} if train.number == number_train
-    end
-    number_carriage = gets.chomp
+  def occupy(number_carriage)
     puts "Какой объем занять?"
     volume = gets.to_i
     @face.carriages.each do |carriage|
       if carriage.number == number_carriage && carriage.free_volume >= volume
-        carriage.load_into_carriage(volume) 
+        carriage.load_into_carriage(volume)
         puts "Осталось свободно: #{carriage.free_volume} м3"
         puts "Занято: #{carriage.occupied_volume} м3"
         break
       else
-        puts "Недостаточно свободного места!"  
+        puts "Недостаточно свободного места!"
         break
       end
     end
   end
 
-  def buy_seats
-    number_train = 0
-    number_carriage = 0
-    number_train = gets.chomp
-    puts "Выбрать вагон"
-    @face.trains.each do |train|
-      train.carriages.each { |carriage| puts "Номер вагона - #{carriage.number}"} if train.number == number_train
-    end
-    number_carriage = gets.chomp
+  def buy_seats(number_carriage)
     @face.carriages.each do |carriage|
-      if carriage.number == number_carriage && carriage.free_seats != 0
+      if carriage.number == number_carriage && carriage.free_seats > 0
         carriage.take_place
         puts "Осталось свободных мест: #{carriage.free_seats}"
         puts "Занято мест: #{carriage.occupied_seats}"
         break
       else
-        puts "Свободные места закончились!"  
+        puts "Свободные места закончились!"
         break
       end
     end
