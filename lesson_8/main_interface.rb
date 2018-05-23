@@ -17,7 +17,8 @@ class MainInterface
       puts "8. Все поезда (блок)"
       puts "9. Все вагоны поезда (блок)"
       puts "10. Занять место или объем в вагоне"
-      puts "11. Выход"
+      puts "11. Количество свободных мест(объема) в вагонах"
+      puts "12. Выход"
       a = gets.to_i
       case a
       when 1                         #Создать станцию, поезд, маршрут или вагон
@@ -136,21 +137,43 @@ class MainInterface
           puts "Поезда с таким номером не существует"
         end
       when 10
+        number_carriage = ''
+        ordinal_number = 0
         puts "Введите номер вагона"
         number_carriage = gets.chomp
-        carriage = @face.carriages.find { |carriage| carriage if carriage.number == number_carriage }
+        carriage = @face.carriages.find.with_index do |carriage, index|
+          if carriage.number == number_carriage
+            ordinal_number = index
+            carriage
+          end
+        end
+        puts
+        raise "Нет вагона с таким номером!" if !(carriage.class < Carriage)
         if carriage.type == 'c'
-          occupy(number_carriage)
+          occupy(ordinal_number)
         else
-          buy_seats(number_carriage)
+          buy_seats(ordinal_number)
         end
       when 11
+        puts "Введите номер вагона"
+        number_carriage = gets.chomp
+        carriage = @face.carriages.find { |carriage| carriage if carriage.number == number_carriage}
+        raise "Нет вагона с таким номером!" if !(carriage.class < Carriage)
+        if carriage.type == 'c'
+          puts "Свободно #{carriage.get_free_capacity} м3."
+        else
+          puts "Осталось свободных мест - #{carriage.get_free_capacity}."
+        end
+      when 12
         exit
       else
         puts "==================================================="
         puts "Выберите число, соответствующее списку!!!"
       end
     end
+  rescue StandardError => e
+    puts e.message
+    retry
   end
 
   def print_info_carriage(carriage, index)
@@ -161,33 +184,25 @@ class MainInterface
     end
   end
 
-  def occupy(number_carriage)
+  def occupy(number)
     puts "Какой объем занять?"
     volume = gets.to_i
-    @face.carriages.each do |carriage|
-      if carriage.number == number_carriage && carriage.capacity >= volume
-        carriage.take_capacity(volume)
-        puts "Осталось свободно: #{carriage.capacity} м3"
-        puts "Занято: #{carriage.occupied_capacity} м3"
-        break
-      else
-        puts "Недостаточно свободного места!"
-        break
-      end
+    if @face.carriages[number].capacity >= volume
+      @face.carriages[number].take_capacity(volume)
+      puts "Осталось свободно: #{@face.carriages[number].capacity} м3"
+      puts "Занято: #{@face.carriages[number].occupied_capacity} м3"
+    else
+      puts "Недостаточно свободного места!"
     end
   end
 
-  def buy_seats(number_carriage)
-    @face.carriages.each do |carriage|
-      if carriage.number == number_carriage && carriage.capacity > 0
-        carriage.take_capacity
-        puts "Осталось свободных мест: #{carriage.capacity}"
-        puts "Занято мест: #{carriage.occupied_capacity}"
-        break
-      else
-        puts "Свободные места закончились!"
-        break
-      end
+  def buy_seats(number)
+    if @face.carriages[number].capacity > 0
+      @face.carriages[number].take_capacity
+      puts "Осталось свободных мест: #{@face.carriages[number].capacity}"
+      puts "Занято мест: #{@face.carriages[number].occupied_capacity}"
+    else
+      puts "Cвободных мест нет!"
     end
   end
 end

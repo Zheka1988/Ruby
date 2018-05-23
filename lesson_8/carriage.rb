@@ -16,9 +16,13 @@ class Carriage
     validate!
   end
 
-  def take_capacity(num = 1)
+  def take_capacity(num)
     @occupied_capacity += num
     @capacity -= num
+  end
+
+  def get_free_capacity
+    capacity
   end
 
   protected
