@@ -15,8 +15,8 @@ class Route
   end
 
   def add_station(station)
-    raise "Нет существует такой станции или она уже включена в маршрут!" if station.class != Station || @stations.find { |stat| stat.name == station.name}
-    raise "Данная станция включена в маршрут" if @stations.find { |stat| stat == station }
+    raise 'Нет существует такой станции или она уже включена в маршрут!' if station.class != Station || @stations.find { |stat| stat.name == station.name }
+    raise 'Данная станция включена в маршрут' if @stations.find { |stat| stat == station }
     @stations.insert(-2, station)
   rescue StandardError => e
     puts e.message
@@ -27,12 +27,12 @@ class Route
       @stations.delete(station)
       show_stations
     else
-      puts "Эта станция не может быть удалена!"
+      puts 'Эта станция не может быть удалена!'
     end
   end
 
   def show_stations
-    @stations.each.with_index(1) { |station, index| puts  "Station number #{index} - #{station.name}" }
+    @stations.each.with_index(1) { |station, index| puts "Station number #{index} - #{station.name}" }
   end
 
   def change_number_route(number)
@@ -48,8 +48,7 @@ class Route
   protected
 
   def validate!
-    raise "Станции не могут быть одинаковыми" if @stations[0] == @stations[1]
-    raise "Номер маршрута состоит из 4 цифр" if number_route.to_s !~ NUMBER_FORMAT
+    raise 'Станции не могут быть одинаковыми' if @stations[0] == @stations[1]
+    raise 'Номер маршрута состоит из 4 цифр' if number_route.to_s !~ NUMBER_FORMAT
   end
-
 end

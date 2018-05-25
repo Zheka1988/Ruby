@@ -2,7 +2,6 @@ require_relative 'manufacturer'
 require_relative 'instance_counter'
 require_relative 'valid'
 class Train
-
   include Manufacturer
   include InstanceCounter
   include Valid
@@ -29,7 +28,7 @@ class Train
   end
 
   def validate!
-    raise "Не корректно введен номер!" if number !~ NUMBER_FORMAT
+    raise 'Не корректно введен номер!' if number !~ NUMBER_FORMAT
   end
 
   def up_speed(speed)
@@ -81,10 +80,10 @@ class Train
   end
 
   def remove_carriage(carriage)
-    @carriages.delete(carriage) if @speed == 0 && !@carriages.empty?
+    @carriages.delete(carriage) if @speed.zero? && !@carriages.empty?
   end
 
   def add_carriage(carriage)
-    @carriages << carriage if @speed == 0
+    @carriages << carriage if @speed.zero?
   end
 end

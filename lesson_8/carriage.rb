@@ -10,7 +10,7 @@ class Carriage
   def initialize(number, type, capacity)
     @capacity = capacity
     @occupied_capacity = 0
-    @array_type = ['p', 'c']
+    @array_type = %w[p c]
     @number = number
     @type = type
     validate!
@@ -28,7 +28,7 @@ class Carriage
   protected
 
   def validate!
-    raise "Вагон может быть пассажирским 'p' или грузовым 'c'" if !@array_type.include?(type)
-    raise "Номер вагона состоит из 4 цифр" if number.to_s !~ NUMBER_FORMAT
+    raise "Вагон может быть пассажирским 'p' или грузовым 'c'" unless @array_type.include?(type)
+    raise 'Номер вагона состоит из 4 цифр' if number.to_s !~ NUMBER_FORMAT
   end
 end
