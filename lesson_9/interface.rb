@@ -153,12 +153,13 @@ class Interface
   end
 
   def create_type_carriages(number_carriage)
-    begin
+    loop do
       puts 'Выберите тип вагона'
       puts '1. Грузовой'
       puts '2. Пассажирский'
       a = gets.to_i
-    end until a == 1 || a == 2
+    break if a == 1 || a == 2
+    end 
     if a == 2
       puts 'Введите количество мест'
       seats = gets.to_i
@@ -196,11 +197,12 @@ class Interface
   end
 
   def add_type_train(number_train)
-    begin
+    loop do
       puts 'Введите 1 - грузовой'
       puts 'Введите 2 - пассажирский'
       b = gets.to_i
-    end until b == 1 || b == 2
+    break if a == 1 || a == 2
+    end 
     @trains << if b == 1
                  CargoTrain.new(number_train)
                else

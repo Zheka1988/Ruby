@@ -29,12 +29,13 @@ class MainInterface
         puts 'Введите номер маршрута'
         number_route = gets.to_i
         if @face.station_exist?(name_station) && @face.route_exist?(number_route)
-          begin
+          loop do
             puts 'Что вы хотите сделать?'
             puts '1. Удалить'
             puts '2. Добавить'
             a = gets.to_i
-          end until a == 1 || a == 2
+          break if a == 1 || a == 2
+          end 
           if a == 1
             @face.del_station(number_route, name_station)
           else
@@ -66,12 +67,13 @@ class MainInterface
         puts 'Введите номер поезда'
         number_train = gets.chomp
         if @face.carriage_exist?(number_carriage) && @face.train_exist?(number_train)
-          begin
+          loop do
             puts 'Что вы хотите сделать?'
             puts '1. Прицепить вагон'
             puts '2. Отцепить вагон'
             a = gets.to_i
-          end until a == 1 || a == 2
+          break if a == 1 || a == 2
+          end 
           if a == 1
             @face.trains.each do |tr|
               if tr.number == number_train
@@ -93,12 +95,13 @@ class MainInterface
         puts 'Введите номер поезда'
         number_train = gets
         if @face.train_exist?(number_train)
-          begin
+          loop do
             puts 'Куда вы хотите переместить?'
             puts '1. --->'
             puts '2. <---'
             a = gets.to_i
-          end until a == 1 || a == 2
+          break if a == 1 || a == 2
+          end 
           if a == 1
             @face.trains.each { |tr| tr.go_next_station if tr.number == number_train }
           else
@@ -159,15 +162,15 @@ class MainInterface
         ordinal_number = 0
         puts 'Введите номер вагона'
         number_carriage = gets.chomp
-        carri = @face.carriages.find.with_index do |carri, index|
+        carriage = @face.carriages.find.with_index do |carri, index|
           if carri.number == number_carriage
             ordinal_number = index
             carri
           end
         end
         puts
-        raise 'Нет вагона с таким номером!' unless carri.class < Carriage
-        if carri.type == 'c'
+        raise 'Нет вагона с таким номером!' unless carriage.class < Carriage
+        if carriage.type == 'c'
           occupy(ordinal_number)
         else
           buy_seats(ordinal_number)
@@ -175,14 +178,14 @@ class MainInterface
       when 11
         puts 'Введите номер вагона'
         number_carriage = gets.chomp
-        carri = @face.carriages.find do |carri|
+        carriage = @face.carriages.find do |carri| 
           carri if carri.number == number_carriage
         end
-        raise 'Нет вагона с таким номером!' unless carri.class < Carriage
-        if carri.type == 'c'
-          puts "Свободно #{carri.get_free_capacity} м3."
+        raise 'Нет вагона с таким номером!' unless carriage.class < Carriage
+        if carriage.type == 'c'
+          puts "Свободно #{carriage.get_free_capacity} м3."
         else
-          puts "Осталось свободных мест - #{carri.get_free_capacity}."
+          puts "Осталось свободных мест - #{carriage.get_free_capacity}."
         end
       when 12
         exit
