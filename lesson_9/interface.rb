@@ -25,13 +25,17 @@ class Interface
 
   def add_station(number_route, name_station)
     @routes.each do |route|
-      route.add_station(@stations.find { |st| st.name == name_station }) if route.number_route == number_route
+      if route.number_route == number_route
+        route.add_station(@stations.find { |st| st.name == name_station })
+      end
     end
   end
 
   def del_station(number_route, name_station)
     @routes.each do |route|
-      route.delete_station(@stations.find { |st| st.name == name_station }) if route.number_route == number_route
+      if route.number_route == number_route
+        route.delete_station(@stations.find { |st| st.name == name_station })
+      end
     end
   end
 
@@ -116,11 +120,7 @@ class Interface
       break if number_route == ''
       if route_exist?(number_route)
         puts 'Маршрут с таким номером уже существует!'
-        @routes.each.with_index(1) do |route, index|
-          puts "Маршрут #{index} - #{route.number_route}, " \
-               "первая станция \"#{route.stations[0].name}\", " \
-               "последняя станция \"#{route.stations[-1].name}\""
-        end
+        print_routes
       else
         add_name_stations(number_route)
       end
@@ -138,11 +138,7 @@ class Interface
       break if number_carriage == ''
       if carriage_exist?(number_carriage)
         puts 'Вагон с таким номером уже существует!'
-        @carriages.each.with_index(1) do |carriage, index|
-          puts "Вагон #{index} - #{carriage.number}, " \
-               "находится на станции \"#{carriage.station.name}\", " \
-               'тип вагона - ' + output_type(carriage.type)
-        end
+        print_carriages
       else
         create_type_carriages(number_carriage)
       end
@@ -153,13 +149,14 @@ class Interface
   end
 
   def create_type_carriages(number_carriage)
+    a = [1, 2]
     loop do
       puts 'Выберите тип вагона'
       puts '1. Грузовой'
       puts '2. Пассажирский'
-      a = gets.to_i
-    break if a == 1 || a == 2
-    end 
+      c = gets.to_i
+      break if a.include?(c)
+    end
     if a == 2
       puts 'Введите количество мест'
       seats = gets.to_i
@@ -169,6 +166,10 @@ class Interface
       volume = gets.to_i
       @carriages << CargoCarriage.new(number_carriage, volume)
     end
+    print_carriages
+  end
+
+  def print_carriages
     @carriages.each.with_index(1) do |carriage, index|
       print "Вагон #{index} - #{carriage.number}, тип вагона - " + output_type(carriage.type)
       if carriage.type == 'c'
@@ -187,23 +188,30 @@ class Interface
     if !station_exist?(one_station) || !station_exist?(end_station)
       puts 'Убедитесь в существовании введенных станций!'
     else
-      @routes << Route.new(@stations.find { |st| st.name == one_station }, @stations.find { |st| st.name == end_station }, number_route)
-      @routes.each.with_index(1) do |route, index|
-        puts "Маршрут #{index} - #{route.number_route}, " \
-             "первая станция \"#{route.stations[0].name}\", " \
-             "последняя станция \"#{route.stations[-1].name}\""
-      end
+      @routes << Route.new(@stations.find { |st| st.name == one_station },
+                           @stations.find { |st| st.name == end_station },
+                           number_route)
+      print_routes
     end
   end
 
-  def add_type_train(number_train)
+  def print_routes
+    @routes.each.with_index(1) do |route, index|
+      puts "Маршрут #{index} - #{route.number_route}, " \
+           "первая станция \"#{route.stations[0].name}\", " \
+           "последняя станция \"#{route.stations[-1].name}\""
+    end
+  end
+
+  def add_type_trains(number_train)
+    a = [1, 2]
     loop do
       puts 'Введите 1 - грузовой'
       puts 'Введите 2 - пассажирский'
-      b = gets.to_i
-    break if a == 1 || a == 2
-    end 
-    @trains << if b == 1
+      c = gets.to_i
+      break if a.include?(c)
+    end
+    @trains << if a == 1
                  CargoTrain.new(number_train)
                else
                  PassengerTrain.new(number_train)
