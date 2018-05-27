@@ -26,7 +26,9 @@ class Station
 
   def train_arrived(train)
     raise 'Не существует такого поезда!' unless train.class < Train
-    raise 'Поезд стоит на этой станции!' if @trains.find { |tr| tr if tr.number == train.number }
+    raise 'Поезд стоит на этой станции!' if @trains.find do |tr|
+      tr if tr.number == train.number
+    end
     @trains << train
   rescue StandardError => e
     puts e.message
@@ -44,6 +46,8 @@ class Station
   protected
 
   def validate!
-    raise 'Название станции включает (а-я,a-z,0-9), не зависимо от регистра, кол-во символов от 3 до 10!' if name !~ NAME_STATION
+    str = 'Название станции включает (а-я,a-z,0-9),
+    не зависимо от регистра, кол-во символов от 3 до 10!'
+    raise str if name !~ NAME_STATION
   end
 end

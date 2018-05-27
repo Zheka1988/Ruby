@@ -70,7 +70,7 @@ class Interface
   def create_stations
     loop do
       puts '=========================================='
-      puts 'Введите название станции или пустую строку (просто нажмите Enter), чтобы выйти'
+      print 'Введите название станции или пустую строку (просто нажмите Enter), чтобы выйти'
       name_station = gets.chomp
       break if name_station == ''
       if station_exist?(name_station)
@@ -78,7 +78,9 @@ class Interface
       else
         @stations << Station.new(name_station)
       end
-      @stations.each.with_index(1) { |station, index| puts "Cтанция #{index} - \"#{station.name}\"" }
+      @stations.each.with_index(1) do |station, index|
+        puts "Cтанция #{index} - \"#{station.name}\""
+      end
     end
   rescue StandardError => e
     puts e.message
@@ -107,7 +109,9 @@ class Interface
                      PassengerTrain.new(number_train)
                    end
       end
-      @trains.each.with_index(1) { |train, index| puts "Поезд #{index} - #{train.number}, тип поезда - " + output_type(train.type) }
+      @trains.each.with_index(1) do |train, index|
+        puts "Поезд #{index} - #{train.number}, тип поезда - " + output_type(train.type)
+      end
     end
   rescue StandardError => e
     puts e.message
@@ -153,7 +157,9 @@ class Interface
       break if number_carriage == ''
       if carriage_exist?(number_carriage)
         puts 'Вагон с таким номером уже существует!'
-        @carriages.each.with_index(1) { |carriage, index| puts "Вагон #{index} - #{carriage.number}, находится на станции \"#{carriage.station.name}\", тип вагона - " + output_type(carriage.type) }
+        @carriages.each.with_index(1) do |carriage, index|
+          puts "Вагон #{index} - #{carriage.number}, находится на станции \"#{carriage.station.name}\", тип вагона - " + output_type(carriage.type)
+        end
       else
         begin
           puts 'Выберите тип вагона'
