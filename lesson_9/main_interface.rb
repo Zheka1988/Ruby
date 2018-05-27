@@ -50,10 +50,12 @@ class MainInterface
         puts 'Введите номер поезда'
         number_train = gets.chomp
         if @face.train_exist?(number_train) && @face.route_exist?(number_route)
-          @face.trains.each do |train|
-            train.routes(@face.routes.find { |route| route.number_route == number_route }) if train.number == number_train
+          @face.trains.each do |tr|
+            tr.routes(@face.routes.find { |rou| rou.number_route == number_route }) if tr.number == number_train
           end
-          @face.trains.each { |train| puts "Поезду присвоен маршрут #{train.route.number_route}" if train.number == number_train }
+          @face.trains.each do |tr|
+            puts "Поезду присвоен маршрут #{tr.route.number_route}" if tr.number == number_train
+          end
         else
           puts 'Убедитесь в существовании поезда и маршрута!'
         end
@@ -63,7 +65,7 @@ class MainInterface
         number_carriage = gets.chomp
         puts 'Введите номер поезда'
         number_train = gets.chomp
-        if @face.carriage_exist?(number_carriage) && @face.train_exist?(number_train) # && face.stations_equal?(number_carriage, number_train)
+        if @face.carriage_exist?(number_carriage) && @face.train_exist?(number_train)
           begin
             puts 'Что вы хотите сделать?'
             puts '1. Прицепить вагон'
@@ -71,12 +73,16 @@ class MainInterface
             a = gets.to_i
           end until a == 1 || a == 2
           if a == 1
-            @face.trains.each do |train|
-              train.add_carriage(@face.carriages.find { |carriage| carriage.number == number_carriage }) if train.number == number_train
+            @face.trains.each do |tr|
+              if tr.number == number_train
+                tr.add_carriage(@face.carriages.find { |carri| carri.number == number_carriage })
+              end
             end
           else
-            @face.trains.each do |train|
-              train.remove_carriage(@face.carriages.find { |carriage| carriage.number == number_carriage }) if train.number == number_train
+            @face.trains.each do |tr|
+              if tr.number == number_train
+                tr.remove_carriage(@face.carriages.find { |carri| carri.number == number_carriage })
+              end
             end
           end
         else
@@ -94,9 +100,9 @@ class MainInterface
             a = gets.to_i
           end until a == 1 || a == 2
           if a == 1
-            @face.trains.each { |train| train.go_next_station if train.number == number_train }
+            @face.trains.each { |tr| tr.go_next_station if tr.number == number_train }
           else
-            @face.trains.each { |train| train.go_past_station if train.number == number_train }
+            @face.trains.each { |tr| tr.go_past_station if tr.number == number_train }
           end
         else
           puts 'Поезда с таким номером не существует!'
@@ -104,14 +110,20 @@ class MainInterface
       when 6                         # Показать все станции"
         puts '==================================================='
         puts 'Маршрут содержит станции: '
-        @face.stations.each.with_index(1) { |station, index| puts "Станция № #{index} - #{station.name}" }
+        @face.stations.each.with_index(1) do |st, index|
+          puts "Станция № #{index} - #{st.name}"
+        end
       when 7                         # Показать все поезда на станции(из старого задания)"
         puts '==================================================='
         puts 'Введите название станции'
         name_station = gets.chomp
         if @face.station_exist?(name_station)
           puts "На станции \"#{name_station}\" находятся поезда:"
-          @face.stations.each { |station| station.trains.each.with_index(1) { |train, index| puts "#{index}. Поезд - №#{train.number}" } if station.name == name_station }
+          @face.stations.each do |st|
+            if st.name == name_station
+              st.trains.each.with_index(1) { |tr, index| puts "#{index}. Поезд - №#{tr.number}" }
+            end
+          end
         else
           puts 'Такой станции не существует'
         end
@@ -119,8 +131,13 @@ class MainInterface
         puts 'Введите название станции'
         name_station = gets.chomp
         if @face.station_exist?(name_station)
-          @face.stations.each do |station|
-            station.all_trains { |train| puts "Поезд № #{train.number}, тип = #{train.type}, количество вагонов #{train.carriages.length}" } if station.name == name_station
+          @face.stations.each do |st|
+            st.all_trains do |tr|
+              if st.name == name_station
+                puts "Поезд № #{tr.number}, тип = #{tr.type}, " \
+                     "количество вагонов #{tr.carriages.length}"
+              end
+            end
           end
         else
           puts 'Такой станции не существует!'
@@ -129,8 +146,10 @@ class MainInterface
         puts 'Введите номер поезда'
         number_train = gets.chomp
         if @face.train_exist?(number_train)
-          @face.trains.each do |train|
-            train.all_carriages { |carriage, index| print_info_carriage(carriage, index) } if train.number == number_train
+          @face.trains.each do |tr|
+            if tr.number == number_train
+              tr.all_carriages { |carri, index| print_info_carriage(carri, index) }
+            end
           end
         else
           puts 'Поезда с таким номером не существует'
@@ -140,15 +159,15 @@ class MainInterface
         ordinal_number = 0
         puts 'Введите номер вагона'
         number_carriage = gets.chomp
-        carriage = @face.carriages.find.with_index do |carriage, index|
-          if carriage.number == number_carriage
+        carri = @face.carriages.find.with_index do |carri, index|
+          if carri.number == number_carriage
             ordinal_number = index
-            carriage
+            carri
           end
         end
         puts
-        raise 'Нет вагона с таким номером!' unless carriage.class < Carriage
-        if carriage.type == 'c'
+        raise 'Нет вагона с таким номером!' unless carri.class < Carriage
+        if carri.type == 'c'
           occupy(ordinal_number)
         else
           buy_seats(ordinal_number)
@@ -156,12 +175,14 @@ class MainInterface
       when 11
         puts 'Введите номер вагона'
         number_carriage = gets.chomp
-        carriage = @face.carriages.find { |carriage| carriage if carriage.number == number_carriage }
-        raise 'Нет вагона с таким номером!' unless carriage.class < Carriage
-        if carriage.type == 'c'
-          puts "Свободно #{carriage.get_free_capacity} м3."
+        carri = @face.carriages.find do |carri|
+          carri if carri.number == number_carriage
+        end
+        raise 'Нет вагона с таким номером!' unless carri.class < Carriage
+        if carri.type == 'c'
+          puts "Свободно #{carri.get_free_capacity} м3."
         else
-          puts "Осталось свободных мест - #{carriage.get_free_capacity}."
+          puts "Осталось свободных мест - #{carri.get_free_capacity}."
         end
       when 12
         exit
@@ -177,9 +198,11 @@ class MainInterface
 
   def print_info_carriage(carriage, index)
     if carriage.type == 'c'
-      puts "#{index}. Номер вагона #{carriage.number}, тип = #{carriage.type}, занято #{carriage.occupied_capacity}, свободно #{carriage.capacity}"
+      puts "#{index}. Номер вагона #{carriage.number}, тип = #{carriage.type}, " \
+           "занято #{carriage.occupied_capacity}, свободно #{carriage.capacity}"
     else
-      puts "#{index}. Номер вагона #{carriage.number}, тип = #{carriage.type}, занято #{carriage.occupied_capacity}, свободно #{carriage.capacity}"
+      puts "#{index}. Номер вагона #{carriage.number}, тип = #{carriage.type}, " \
+           "занято #{carriage.occupied_capacity}, свободно #{carriage.capacity}"
     end
   end
 

@@ -1,7 +1,7 @@
 class Interface
   NAME_METHOD = {
     1 => :create_stations, 2 => :create_trains,
-    3 => :reate_routes, 4 => :create_carriages
+    3 => :create_routes, 4 => :create_carriages
   }.freeze
   attr_reader :stations, :trains, :routes, :carriages
 
@@ -70,7 +70,7 @@ class Interface
   def create_stations
     loop do
       puts '=========================================='
-      print 'Введите название станции или пустую строку (просто нажмите Enter), чтобы выйти'
+      puts 'Введите название станции или пустую строку (просто нажмите Enter), чтобы выйти'
       name_station = gets.chomp
       break if name_station == ''
       if station_exist?(name_station)
@@ -97,17 +97,7 @@ class Interface
       if train_exist?(number_train)
         puts 'Поезд с таким номером уже существует!'
       else
-        begin
-          puts 'Введите 1 - грузовой'
-          puts 'Введите 2 - пассажирский'
-          b = gets.to_i
-        end until b == 1 || b == 2
-
-        @trains << if b == 1
-                     CargoTrain.new(number_train)
-                   else
-                     PassengerTrain.new(number_train)
-                   end
+        add_type_trains(number_train)
       end
       @trains.each.with_index(1) do |train, index|
         puts "Поезд #{index} - #{train.number}, тип поезда - " + output_type(train.type)
@@ -127,21 +117,12 @@ class Interface
       if route_exist?(number_route)
         puts 'Маршрут с таким номером уже существует!'
         @routes.each.with_index(1) do |route, index|
-          puts "Маршрут #{index} - #{route.number_route}, первая станция \"#{route.stations[0].name}\", последняя станция \"#{route.stations[-1].name}\""
+          puts "Маршрут #{index} - #{route.number_route}, " \
+               "первая станция \"#{route.stations[0].name}\", " \
+               "последняя станция \"#{route.stations[-1].name}\""
         end
       else
-        puts 'Введите название первой станции'
-        one_station = gets.chomp
-        puts 'Введите название последней станции'
-        end_station = gets.chomp
-        if !station_exist?(one_station) || !station_exist?(end_station)
-          puts 'Убедитесь в существовании введенных станций!'
-        else
-          @routes << Route.new(@stations.find { |st| st.name == one_station }, @stations.find { |st| st.name == end_station }, number_route)
-          @routes.each.with_index(1) do |route, index|
-            puts "Маршрут #{index} - #{route.number_route}, первая станция \"#{route.stations[0].name}\", последняя станция \"#{route.stations[-1].name}\""
-          end
-        end
+        add_name_stations(number_route)
       end
     end
   rescue StandardError => e
@@ -158,36 +139,72 @@ class Interface
       if carriage_exist?(number_carriage)
         puts 'Вагон с таким номером уже существует!'
         @carriages.each.with_index(1) do |carriage, index|
-          puts "Вагон #{index} - #{carriage.number}, находится на станции \"#{carriage.station.name}\", тип вагона - " + output_type(carriage.type)
+          puts "Вагон #{index} - #{carriage.number}, " \
+               "находится на станции \"#{carriage.station.name}\", " \
+               'тип вагона - ' + output_type(carriage.type)
         end
       else
-        begin
-          puts 'Выберите тип вагона'
-          puts '1. Грузовой'
-          puts '2. Пассажирский'
-          a = gets.to_i
-        end until a == 1 || a == 2
-        if a == 2
-          puts 'Введите количество мест'
-          seats = gets.to_i
-          @carriages << PassengerCarriage.new(number_carriage, seats)
-        else
-          puts 'Введите объем вагона'
-          volume = gets.to_i
-          @carriages << CargoCarriage.new(number_carriage, volume)
-        end
-        @carriages.each.with_index(1) do |carriage, index|
-          print "Вагон #{index} - #{carriage.number}, тип вагона - " + output_type(carriage.type)
-          if carriage.type == 'c'
-            puts ", объем вагона #{carriage.capacity}."
-          else
-            puts ", количество мест #{carriage.capacity}."
-          end
-        end
+        create_type_carriages(number_carriage)
       end
     end
   rescue StandardError => e
     puts e.message
     retry
+  end
+
+  def create_type_carriages(number_carriage)
+    begin
+      puts 'Выберите тип вагона'
+      puts '1. Грузовой'
+      puts '2. Пассажирский'
+      a = gets.to_i
+    end until a == 1 || a == 2
+    if a == 2
+      puts 'Введите количество мест'
+      seats = gets.to_i
+      @carriages << PassengerCarriage.new(number_carriage, seats)
+    else
+      puts 'Введите объем вагона'
+      volume = gets.to_i
+      @carriages << CargoCarriage.new(number_carriage, volume)
+    end
+    @carriages.each.with_index(1) do |carriage, index|
+      print "Вагон #{index} - #{carriage.number}, тип вагона - " + output_type(carriage.type)
+      if carriage.type == 'c'
+        puts ", объем вагона #{carriage.capacity}."
+      else
+        puts ", количество мест #{carriage.capacity}."
+      end
+    end
+  end
+
+  def add_name_stations(number_route)
+    puts 'Введите название первой станции'
+    one_station = gets.chomp
+    puts 'Введите название последней станции'
+    end_station = gets.chomp
+    if !station_exist?(one_station) || !station_exist?(end_station)
+      puts 'Убедитесь в существовании введенных станций!'
+    else
+      @routes << Route.new(@stations.find { |st| st.name == one_station }, @stations.find { |st| st.name == end_station }, number_route)
+      @routes.each.with_index(1) do |route, index|
+        puts "Маршрут #{index} - #{route.number_route}, " \
+             "первая станция \"#{route.stations[0].name}\", " \
+             "последняя станция \"#{route.stations[-1].name}\""
+      end
+    end
+  end
+
+  def add_type_train(number_train)
+    begin
+      puts 'Введите 1 - грузовой'
+      puts 'Введите 2 - пассажирский'
+      b = gets.to_i
+    end until b == 1 || b == 2
+    @trains << if b == 1
+                 CargoTrain.new(number_train)
+               else
+                 PassengerTrain.new(number_train)
+               end
   end
 end
