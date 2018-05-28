@@ -83,7 +83,7 @@ class MainInterface
           puts 'Убедитесь в существовании вагона и поезда'
         end
       when 5
-        a = [1, 2]
+        array_direction = [1, 2]
         puts '==================================================='
         puts 'Введите номер поезда'
         number_train = gets
@@ -92,10 +92,10 @@ class MainInterface
             puts 'Куда вы хотите переместить?'
             puts '1. --->'
             puts '2. <---'
-            c = gets.to_i
-            break if a.include?(c)
+            direction = gets.to_i
+            break if array_direction.include?(direction)
           end
-          if a == 1
+          if direction == 1
             drive_to_forward(number_train)
           else
             drive_to_back(number_train)
