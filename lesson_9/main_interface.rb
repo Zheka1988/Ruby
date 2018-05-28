@@ -230,7 +230,7 @@ class MainInterface
   def carriage_add(number_train, number_carriage)
     @face.trains.each do |tr|
       if tr.number == number_train
-        tr.add_carriage(@face.carriages.find { |carri| carri.number == number_carriage })
+        tr.add_carriage(find_carriage(number_carriage))
       end
     end
   end
@@ -238,16 +238,24 @@ class MainInterface
   def carriage_remove(number_train, number_carriage)
     @face.trains.each do |tr|
       if tr.number == number_train
-        tr.remove_carriage(@face.carriages.find { |carri| carri.number == number_carriage })
+        tr.remove_carriage(find_carriage(number_carriage))
       end
     end
+  end
+
+  def find_carriage(number_carriage)
+    @face.carriages.find { |carri| carri if carri.number == number_carriage }
   end
 
   def add_route(number_route, number_train)
     @face.trains.each do |tr|
       if tr.number == number_train
-        tr.routes(@face.routes.find { |rou| rou.number_route == number_route })
+        tr.routes(find_route(number_route))
       end
     end
+  end
+
+  def find_route(number_route)
+    @face.routes.find { |rou| rou if rou.number_route == number_route }
   end
 end
