@@ -6,11 +6,11 @@ module Validation
   module ClassMethods
     def validate (name, type_valid, addition_value = nil)
       if type_valid == :presence
-        puts "Значение, не может быть nil!" if name == nil || name == ''
+        raise "Значение, не может быть nil!" if name == nil || name == ''
       elsif type_valid == :type
-        puts "Не соответствуют типы!" if addition_value == nil || name.class.to_s != addition_value
+        raise "Не соответствуют типы!" if addition_value == nil || name.class.to_s != addition_value
       elsif type_valid == :format
-        puts "Значение не соответствует формату!" if addition_value == nil || !name.to_s[eval(addition_value)]
+        raise "Значение не соответствует формату!" if addition_value == nil || !name.to_s[eval(addition_value)]
       end
     end
   end
@@ -23,6 +23,10 @@ module Validation
       puts "Введите регулярное выражение:"
       regexp  = gets.chomp
       self.class.validate name, :format, regexp
+      true
+    rescue RuntimeError => e
+      e.message
+      false
     end
 
     def valid?(name)
@@ -36,5 +40,4 @@ class Test
   include Validation
   attr_accessor_wih_history :a, :b, :c
   strong_attr_accessor :attr, String
-
 end
