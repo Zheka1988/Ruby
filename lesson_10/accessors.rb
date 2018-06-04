@@ -6,7 +6,7 @@ module Accessors
       define_method(name) { instance_variable_get(var_name) }
       define_method("#{name}=".to_sym) do |value|
         array = instance_variable_get(name_history) || []
-        array << value
+        array << instance_variable_get(var_name)
         instance_variable_set(name_history,array)
         instance_variable_set(var_name, value)
       end
@@ -18,11 +18,9 @@ module Accessors
     name_attr = "@#{name}".to_sym
     define_method(name) { instance_variable_get(name_attr) }
     define_method("#{name}=".to_sym) do |value|
-      raise "Не соответствие типов!" if value.class != name_class
+      raise "Не соответствие типов!" unless value.is_a? name_class
       instance_variable_set(name_attr, value)
     end
-  rescue RuntimeError => e
-    e.message
   end
 
 end

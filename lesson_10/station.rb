@@ -1,12 +1,18 @@
 require_relative 'instance_counter'
-require_relative 'valid'
+require_relative 'validation'
+require_relative 'accessors'
 class Station
+  extend Accessors
+  include Validation
   include InstanceCounter
   include Valid
-  attr_reader :name, :trains
+  attr_reader :trains
 
-  NAME_STATION = /\A[а-яa-z0-9]{3,10}\Z/i
+  NAME = /\A[а-яa-z0-9]{3,10}\Z/i
   @@stations = []
+
+  attr_accessor_wih_history :name, :b, :c
+  strong_attr_accessor :attr, String
 
   def self.all
     @@stations
@@ -45,9 +51,4 @@ class Station
 
   protected
 
-  def validate!
-    str = 'Название станции включает (а-я,a-z,0-9),
-    не зависимо от регистра, кол-во символов от 3 до 10!'
-    raise str if name !~ NAME_STATION
-  end
 end
