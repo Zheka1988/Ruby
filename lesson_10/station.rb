@@ -5,14 +5,17 @@ class Station
   extend Accessors
   include Validation
   include InstanceCounter
-  include Valid
   attr_reader :trains
 
   NAME = /\A[а-яa-z0-9]{3,10}\Z/i
   @@stations = []
 
-  attr_accessor_wih_history :name, :b, :c
-  strong_attr_accessor :attr, String
+  attr_accessor_with_history :a, :b, :c
+  strong_attr_accessor :color, String
+
+  validate :name, :presence
+  validate :name, :format, NAME
+  validate :name, :type, String
 
   def self.all
     @@stations
