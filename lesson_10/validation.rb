@@ -43,8 +43,4 @@ module Validation
   def type(var, type)
     raise "Ошибка типа. Нужен #{type}" unless var.is_a?(type)
   end
-
 end
-
-
-

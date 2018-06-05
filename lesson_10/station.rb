@@ -51,7 +51,4 @@ class Station
   def train_left(train)
     @trains.delete(train)
   end
-
-  protected
-
 end
