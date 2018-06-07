@@ -10,8 +10,9 @@ class Station
   NAME = /\A[а-яa-z0-9]{3,10}\Z/i
   @@stations = []
 
-  attr_accessor_with_history :a, :b, :c
+  attr_accessor_with_history :name, :fhone_number
   strong_attr_accessor :color, String
+  strong_attr_accessor :area, Float
 
   validate :name, :presence
   validate :name, :format, NAME

@@ -1,11 +1,21 @@
 require_relative 'instance_counter'
-require_relative 'valid'
+require_relative 'validation'
+require_relative 'accessors'
 class Route
   include InstanceCounter
-  include Valid
-  attr_reader :stations, :number_route, :first_station, :finish_station
+  extend Accessors
+  include Validation
+  attr_reader :stations, :first_station, :finish_station
 
   NUMBER_FORMAT = /^\d{4}$/
+
+  attr_accessor_with_history :number_route
+  strong_attr_accessor :extension, Float
+
+
+  validate :number_route, :presence
+  validate :number_route, :format, NUMBER_FORMAT
+  validate :number_route, :type, String
 
   def initialize(first_station, finish_station, number)
     @stations = [first_station, finish_station]
@@ -50,12 +60,5 @@ class Route
     else
       @number_route = spare_number
     end
-  end
-
-  protected
-
-  def validate!
-    raise 'Станции не могут быть одинаковыми' if @stations[0] == @stations[1]
-    raise 'Номер маршрута состоит из 4 цифр' if number_route.to_s !~ NUMBER_FORMAT
   end
 end

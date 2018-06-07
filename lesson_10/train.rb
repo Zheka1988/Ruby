@@ -1,14 +1,24 @@
 require_relative 'manufacturer'
 require_relative 'instance_counter'
-require_relative 'valid'
+require_relative 'validation'
+require_relative 'accessors'
 class Train
   include Manufacturer
   include InstanceCounter
-  include Valid
+  extend Accessors
+  include Validation
   @@trains = {}
   NUMBER_FORMAT = /\A[а-яa-z0-9]{3}\-?[а-яa-z0-9]{2}\Z/ui
 
-  attr_reader :speed, :number, :carriages, :route, :type
+  attr_accessor_with_history :number
+  strong_attr_accessor :color, String
+  strong_attr_accessor :view, String
+
+  validate :number, :presence
+  validate :number, :format, NUMBER_FORMAT
+  validate :number, :type, String
+
+  attr_reader :speed, :carriages, :route, :type
   def self.find(number)
     @@trains[number]
   end
@@ -25,10 +35,6 @@ class Train
 
   def all_carriages
     @carriages.each.with_index(1) { |carriage, index| yield(carriage, index) }
-  end
-
-  def validate!
-    raise 'Не корректно введен номер!' if number !~ NUMBER_FORMAT
   end
 
   def up_speed(speed)
