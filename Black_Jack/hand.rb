@@ -1,6 +1,7 @@
-module Casino
+module Hand
   def show_menu
     loop do
+      open_card if number_cards
       puts "=================="
       puts "Что вы хотите сделать?"
       puts "1. Пропустить ход"
@@ -11,7 +12,11 @@ module Casino
       when 1
         diller_step
       when 2
-        add_card
+        if @user.cards.size <= 2
+          add_card
+        else
+          puts "У Вас 3 карты! Хотите открыть?"
+        end
       when 3
         open_card
       else
@@ -20,7 +25,7 @@ module Casino
     end
   end
 
-  def add_card #если 3 карты
+  def add_card
     element = []
     element << @deck.give_card
     @user.cards << element[0][1]
@@ -31,24 +36,26 @@ module Casino
     end
     puts "#{@user.name}, Вы получили 1 карту \"#{element[0][1]}\""
     puts "Набрано очков #{@user.points}"
+    open_card if number_cards
+    diller_step
   end
 
   def open_card
-    print "Ваши карты #{@user.cards}\n"
-    print "Карты диллера #{@diller.cards}\n"
-    if @user.points == @diller.points
-      puts "Ничья"
+    print "Ваши карты #{@user.cards}, набрано #{@user.points} \n"
+    print "Карты диллера #{@diller.cards}, набрано #{@diller.points} \n"
+    if @user.points == @diller.points || (@user.points > 21 && @diller.points >21)
+      puts "Ничья!"
       @user.bank += @bank_games / 2
       @diller.bank += @bank_games / 2
       @bank_games = 0
       puts "У Вас на счету #{@user.bank} $"
-    elsif @user.points > 21 || @user.points < @diller.points
-      puts "Вы проиграли"
+    elsif @user.points > 21 || (@user.points < @diller.points && @diller.points <=21)
+      puts "Вы проиграли!"
       @diller.bank += @bank_games
       @bank_games = 0
       puts "У Вас на счету #{@user.bank} $"
     elsif @diller.points > 21 || @user.points > @diller.points
-      puts "Вы выиграли"
+      puts "Вы выиграли!"
       @user.bank += @bank_games
       @bank_games = 0
       puts "У Вас на счету #{@user.bank} $"
@@ -56,8 +63,21 @@ module Casino
     next_game
   end
 
-  def diller_step #если 3 карты или 17 очков и более
-
+  def diller_step
+    if @diller.cards.size == 3 || @diller.points >= 17
+      puts "Диллер пропустил ход!"
+      show_menu
+    else
+      element = []
+      element << @deck.give_card
+      @diller.cards << element[0][1]
+      if element[0][1].include?("T") && (@diller.points + element[0][0]) > 21
+        @diller.add_points(1)
+      else
+        @diller.add_points(element[0][0])
+      end
+      puts "#{@diller.name}, получил 1 карту \"*\""
+    end
   end
 
 
@@ -76,6 +96,14 @@ module Casino
       else
         puts "Введите 1 или 2"
       end
+    end
+  end
+
+  def number_cards
+    if @user.cards.size == 3 && @diller.cards.size == 3
+      true
+    else
+      false
     end
   end
 

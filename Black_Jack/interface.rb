@@ -1,6 +1,6 @@
-require_relative 'casino'
+require_relative 'hand'
 class Interface
-  include Casino
+  include Hand
   attr_accessor :user, :diller, :deck, :bank_games
 
   def initialize
@@ -15,7 +15,6 @@ class Interface
   end
 
   def create_object
-    create_deck
     create_user
     create_diller
   end
@@ -32,8 +31,9 @@ class Interface
     puts "Введите Ваше имя"
     name = gets.chomp
     @user = User.new(name)
-  rescue StandardError => e
-    puts e.inspect
+  rescue RuntimeError => e
+    puts e.message
+    start
   end
 
   def create_diller
@@ -44,6 +44,7 @@ class Interface
   end
 
   def start_game
+    create_deck
     reset_value
     start_user
     start_diller
